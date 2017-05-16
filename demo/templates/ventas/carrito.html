@@ -1,0 +1,60 @@
+<table>
+  <thead>
+    <tr>
+    <td>Producto</td>
+  </tr>
+  </thead>
+  <tbody>
+    {% for producto in productos %}  
+    <tr>
+      <td>{{ producto }}</td><td>{{producto.p_total}}</td>
+      <td><a href="/del/producto/{{value.1.id}}"><i class="icon-remove"></i></a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<a href="/hacer-compra/" class="btn btn-primary">Comprar</a>
+<a id="clear" href="#" class="btn btn-primary">Limpiar Carrito</a>
+
+<script>
+  $(document).ready(function(){
+    $("#clear").click(function(){
+      
+      $.get("/borrar-carrito/",function(data){
+        $("#cuerpo_carrito").html(data)
+      })
+    })
+  })
+</script>
+
+<!--<table>
+  <thead>
+    <tr>
+    <td>Producto</td>
+  </tr>
+  </thead>
+  <tbody>
+    {% for key.value in productos.items %}  
+    <tr>
+      <td>{{ key }}</td><td style=" *** "> {{value.0}}</td>
+      <td><a href="/del/producto/{{value.1.id}}"><i class="icon-remove"></i></a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<a href="/hacer-compra/" class="btn btn-primary">Comprar</a>
+<a id="clear" href="#" class="btn btn-primary">Limpiar Carrito</a>
+
+
+<script>
+  $(document).ready(function(){
+    $("#clear").click(function(){
+      ev.prevenDefault()
+      $.get("/borrar-carrito/",function(data){
+        $("#cuerpo_carrito").html(data)
+      })
+    })
+  })
+</script> -->
