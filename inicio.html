@@ -1,23 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-</head>
-<body>
-	<div>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla officia repellat et asperiores deserunt ipsum, ratione voluptas voluptatum fugiat optio fugit provident illum quisquam quo aliquam iusto ab quibusdam facilis!</p>
-	</div>
-	<div>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore nisi laborum totam eius omnis inventore. Deserunt recusandae dolor eos cumque ipsum ad sint, magnam voluptas ipsa minus veniam numquam.
-	</div>
 
-	<div>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore nisi laborum totam eius omnis inventore. Deserunt recusandae dolor eos cumque ipsum ad sint, magnam voluptas ipsa minus veniam numquam.
-	</div>
-	<p> Este es un nuevo parrafo </p>
-	
-	<input type="password" action=" " value="Cargar"> Cargar </input>
-	<button type="submit" class="btn btn-small btn-primary">Guardar</button>
-</body>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Proyecto Demo</title>
+    <!-- Le styles -->
+    <link href="/media/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="/media/js/jquery.js"></script>
+    <script src="/media/js/example.js"></script>
+    <script src="/media/js/jquery.form.min.js"></script>
+    <script src="/media/js/demo.js"></script>
+    <script src="/media/bootstrap/js/bootstrap.js"></script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <script type="text/javascript">
+        $(document).on('ready',function(){
+              $.ajax({
+                  type:"GET",
+                  contentType:"application/json; charset=utf-8",
+                  dateType:"json",
+                  url:"/ws/productos/",
+                  success:function(response){
+                          var i = (response.length-1)-2;
+                          for(i;i<=(response.length-1);i++){
+                              $('#ProductosNuevos').append("<li>"+response[i].fields.nombre+"</li>");
+                          }    
+                  }
+              });
+			$.get('/carrito/', function(data){
+			   $('#cuerpo_carrito').html(data)
+			});  
+        });
+    </script>
+    {% block scripts %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="{% url "vista_principal" %}">Proyecto Ventas </a>
+            {% if user.is_authenticated %}
+            <p class="navbar-text pull-right">
+              Logged in as {{ user.username }}
+            </p>
+            {% endif %}
+            <ul class="nav">
+              <li><a href="/productos/page/1/">Productos</a></li>
+              <li><a href="{% url "vista_contacto" %}">Contacto</a></li>
+              <li><a href="{% url "vista_about" %}">Acerca de ...</a></li>
+              {% if user.is_authenticated %}
+  				    <li><a href="{% url "vista_logout" %}"> Cerrar Sesion </a></li>
+  		        {% else %}
+  				    <li><a href="{% url "vista_login" %}"> Login </a></li>
+  		        {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span9">
+          <div class="hero-unit">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div><!--/span-->
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Mi perfil</li>
+              <br><p align="justify">
+              {%if user.is_authenticated %}
+                <p>Bienvenido {{ user }} </p>
+                <img src="{{get_image_profile}}" width="50px" heigth="50px"/>
+              {% else %}
+                <a href="/login/" class="btn btn-primary">Login<a>
+              {% endif %}
+              </p>
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+			 {%if user.is_authenticated %}
+              <li class="nav-header">Mi Carrito</li>
+              <br><p align="justify">
+              	Carrito de {{user.username}}
+              </p>
+			  <div id="cuerpo_carrito"></div>
+			  {% else %}
+			  <p> Por favor <a href="/login/">Identifiquese</a>
+            </ul>
+		    {% endif %}	
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list" id="ProductosNuevos">
+              <li class="nav-header">Nuevos Productos</li>
+              
+            </ul>
+          </div><!--/.well -->
+           <img src="/media/images/django.gif"/>
+        </div><!--/span-->
+      </div><!--/row-->
+      <hr>
+      <footer>
+        <p>&copy; Open Project 2013. Versión Django: {{django_version}}</p> 
+      </footer>
+    </div><!--/.fluid-container-->
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
 </html>
